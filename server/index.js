@@ -5,16 +5,18 @@ let app = express();
 app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/repos', function (req, res) {
-  githubHelper.getReposByUsername('slhodak', (err, res, body) => {
-    console.log('error:', err); // Print the error if one occurred
-    console.log('statusCode:', res && res.statusCode); // Print the response status code if a response was received
-    console.log('body:', body); 
-  });
+  console.log('Handling POST request to /repos');
+  // githubHelper.getReposByUsername('slhodak', (err, res, body) => {
+  //   console.log('error:', err); // Print the error if one occurred
+  //   console.log('statusCode:', res && res.statusCode); // Print the response status code if a response was received
+  //   console.log('body:', body); 
+  //   res.end();
+  // });
   // TODO -- your code here!
   // this route should take the github username and password
   // and get the repo information from the github api, then
   // save the repo information in the database
-
+  res.send(JSON.stringify({a:'hi'}));
 });
 
 app.get('/repos', function (req, res) {
@@ -22,11 +24,12 @@ app.get('/repos', function (req, res) {
   // get all repos from database
   // rank them
   // send back the top 25
+  res.send(JSON.stringify({a:'hi'}));
 });
 
-let rankingAlgorithm = (repos) => {
+// let rankingAlgorithm = (repos) => {
 
-}
+// }
 
 let port = 1128;
 

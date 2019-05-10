@@ -12,7 +12,17 @@ class App extends React.Component {
     }
   }
   search(term) {
-    fetch('http://127.0.0.1:1128');
+    fetch('http://127.0.0.1:1128/repos', {
+      method: 'POST'
+    })
+    .then(response => {
+      response.json().then(res => {
+        console.log(res);
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
     console.log(`${term} was searched`);
   }
   render() {
