@@ -17,7 +17,9 @@ class App extends React.Component {
       method: 'GET'
     })
     .then(res => {
-      console.log(res.body);
+      res.json().then(data => {
+        console.log(data);
+      });
     })
     .catch(err => {
       console.log(err);

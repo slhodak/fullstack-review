@@ -1,9 +1,11 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 var githubHelper = require('../helpers/github.js');
 var mongo = require('../database/index.js');
 
 let app = express();
 
+app.use(bodyParser.json());
 app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/repos', function (req, res) {
@@ -15,7 +17,7 @@ app.post('/repos', function (req, res) {
       console.log('statusCode:', res && res.statusCode); // Print the response status code if a response was received
       let data = extractRepoData(JSON.parse(body));
       createRepoRecords(data);
-      res.send({response});
+      res.end();
     }
   });
 });
@@ -31,7 +33,7 @@ app.get('/repos', function (req, res) {
     } else {
       res.status(200);
       res.set('Message', 'Successful read');
-      res.send(docs);
+      res.send(JSON.stringify(docs));
     }
   });
   // rank them
