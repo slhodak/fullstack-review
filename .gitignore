@@ -1,0 +1,10 @@
+### NPM ###
+node_modules
+
+
+### DIST ###
+client/dist/bundle.js
+
+
+### CONFIG ###
+config.js
