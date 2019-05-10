@@ -14,7 +14,6 @@ app.post('/repos', function (req, res) {
     } else {
       console.log('statusCode:', res && res.statusCode); // Print the response status code if a response was received
       let data = extractRepoData(JSON.parse(body));
-      //  send data to database
       createRepoRecords(data);
       res.send({response});
     }
@@ -24,9 +23,19 @@ app.post('/repos', function (req, res) {
 app.get('/repos', function (req, res) {
   // this route should send back the top 25 repos
   // get all repos from database
+  mongo.readAll((err, docs) => {
+    if (err) {
+      res.status(500);
+      console.log(err);
+      res.send(`database read error: ${err}`);
+    } else {
+      res.status(200);
+      res.set('Message', 'Successful read');
+      res.send(docs);
+    }
+  });
   // rank them
   // send back the top 25
-  res.send(JSON.stringify({a:'hi'}));
 });
 
 // let rankingAlgorithm = (repos) => {

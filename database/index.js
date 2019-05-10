@@ -23,8 +23,6 @@ let repoSchema = mongoose.Schema({
 let Repo = mongoose.model('Repo', repoSchema);
 
 let save = (data, callback) => {
-  // TODO your code here
-  // This function should save a repo or repos to the mondoDB
   Repo.insertMany(data)
     .then(docs => {
       console.log('successful insert');
@@ -32,6 +30,17 @@ let save = (data, callback) => {
     .catch(err => {
       console.log(err);
     });
-}
+};
 
+let readAll = (callback) => {
+  Repo.find({})
+    .then(docs => {
+      callback(null, docs);
+    })
+    .catch(err => {
+      callback(err);
+    });
+};
+
+module.exports.readAll = readAll;
 module.exports.save = save;
