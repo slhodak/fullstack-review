@@ -37,6 +37,7 @@ let extractRepoData = (repos) => {
   let data = [];
   repos.forEach(repo => {
     let repoData = {};
+    repoData.id = repo.id;
     repoData.name = repo.name;
     repoData.owner = {};
     repoData.owner.login = repo.owner.login;

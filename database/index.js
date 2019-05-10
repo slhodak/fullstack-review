@@ -8,7 +8,7 @@ db.once('open', function() {
 });
 
 let repoSchema = mongoose.Schema({
-
+  id: { type: String, unique: true },
   name: String,
   url: String,
   owner: {
