@@ -8,7 +8,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      repos: []
+      repos: {}
     }
     this.search = this.search.bind(this);
   }
@@ -18,18 +18,28 @@ class App extends React.Component {
     })
     .then(res => {
       res.json().then(data => {
-        console.log(data);
+        this.updateReposInState(data);
       });
     })
     .catch(err => {
       console.log(err);
     });
   }
+  updateReposInState(newRepos) {
+    console.log('updating repos in state');
+    let repoList = this.state.repos;
+    newRepos.forEach(repo => {
+      repoList[repo.id] = repo;
+    });
+    this.setState({
+      repos: repoList
+    }, () => console.log(this.state.repos));
+  }
   search(term) {
     fetch('http://127.0.0.1:1128/repos', {
       method: 'POST'
     })
-    .then(response => {
+    .then(res => {
       this.getResults();
     })
     .catch(err => {
