@@ -12,6 +12,7 @@ class App extends React.Component {
     }
   }
   search(term) {
+    fetch('http://127.0.0.1:1128');
     console.log(`${term} was searched`);
   }
   render() {
