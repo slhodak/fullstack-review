@@ -1,25 +1,24 @@
 const express = require('express');
 var githubHelper = require('../helpers/github.js');
+var mongo = require('../database/index.js');
+
 let app = express();
 
 app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/repos', function (req, res) {
   console.log('Handling POST request to /repos');
-  githubHelper.getReposByUsername('slhodak', (err, res, body) => {
-    if (err) {
-      console.log('error:', err);
+  githubHelper.getReposByUsername('slhodak', (error, response, body) => {
+    if (error) {
+      res.send({error});
     } else {
       console.log('statusCode:', res && res.statusCode); // Print the response status code if a response was received
-      // console.log(JSON.parse(body));
-      extractRepoData(JSON.parse(body));
+      let data = extractRepoData(JSON.parse(body));
+      //  send data to database
+      createRepoRecords(data);
+      res.send({response});
     }
   });
-  // TODO -- your code here!
-  // this route should take the github username and password
-  // and get the repo information from the github api, then
-  // save the repo information in the database
-  res.send({a:'hi'});
 });
 
 app.get('/repos', function (req, res) {
@@ -49,7 +48,18 @@ let extractRepoData = (repos) => {
     repoData.open_issues = repo.name;
     data.push(repoData);
   });
-  console.log(data);
+  return data;
+};
+
+let createRepoRecords = (data) => {
+  //  create or update records in mongoDB for all repos in data
+  mongo.save(data, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(result);
+    }
+  });
 };
 
 let port = 1128;

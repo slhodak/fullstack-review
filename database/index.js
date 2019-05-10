@@ -8,6 +8,7 @@ db.once('open', function() {
 });
 
 let repoSchema = mongoose.Schema({
+
   name: String,
   url: String,
   owner: {
@@ -15,16 +16,22 @@ let repoSchema = mongoose.Schema({
     url: String,
     avatar_url: String
   },
-  watchers: Number,
-  forks: Number,
-  open_issues: Number
+  watchers_count: Number,
+  forks_count: Number
 });
 
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (/* TODO */) => {
+let save = (data, callback) => {
   // TODO your code here
   // This function should save a repo or repos to the mondoDB
+  Repo.insertMany(data)
+    .then(docs => {
+      console.log('successful insert');
+    })
+    .catch(err => {
+      console.log(err);
+    });
 }
 
 module.exports.save = save;
