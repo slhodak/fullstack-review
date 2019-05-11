@@ -17,7 +17,8 @@ let repoSchema = mongoose.Schema({
     avatar_url: String
   },
   watchers_count: Number,
-  forks_count: Number
+  forks_count: Number,
+  open_issues_count: Number
 });
 
 let Repo = mongoose.model('Repo', repoSchema);

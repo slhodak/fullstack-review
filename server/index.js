@@ -69,7 +69,7 @@ let extractRepoData = (repos) => {
     repoData.url = repo.url;
     repoData.watchers_count = repo.watchers_count;
     repoData.forks_count = repo.forks;
-    repoData.open_issues = repo.open_issues;
+    repoData.open_issues_count = repo.open_issues_count;
     filteredRepos.push(repoData);
   });
   return filteredRepos;
@@ -105,7 +105,7 @@ let extractTopTwentyFive = (callback) => {
 }
 
 let rateRepo = (repo) => {
-  return repo.watchers_count + repo.forks_count;
+  return repo.watchers_count + repo.forks_count - (10 * repo.open_issues_count);
 }
 
 let port = 1128;
