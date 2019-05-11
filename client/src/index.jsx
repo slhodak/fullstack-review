@@ -12,6 +12,20 @@ class App extends React.Component {
     }
     this.search = this.search.bind(this);
   }
+  search(term) {
+    fetch('http://127.0.0.1:1128/repos', {
+      method: 'POST',
+      body: term
+    })
+    .then(res => {
+      this.getResults();
+    })
+    .catch(err => {
+      this.getResults();
+      console.log(err);
+    });
+    console.log(`${term} was searched`);
+  }
   getResults() {
     fetch('http://127.0.0.1:1128/repos', {
       method: 'GET'
@@ -30,20 +44,6 @@ class App extends React.Component {
     this.setState({
       repos: newRepos
     }, () => console.log(this.state.repos));
-  }
-  search(term) {
-    fetch('http://127.0.0.1:1128/repos', {
-      method: 'POST',
-      body: term
-    })
-    .then(res => {
-      this.getResults();
-    })
-    .catch(err => {
-      this.getResults();
-      console.log(err);
-    });
-    console.log(`${term} was searched`);
   }
   render() {
     return(
