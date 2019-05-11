@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import './styles.css';
+import './styles/styles.css';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx'
 

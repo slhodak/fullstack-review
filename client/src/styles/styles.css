@@ -1,8 +1,12 @@
 html {
-  background-color: rgb(234, 197, 255);
+  background-color: rgb(247, 234, 255);
 }
 
-.repos img {
+.repoRow td img {
   height: 50px;
-  width: 50px;
+  border-radius: 50%;
+}
+
+.repoRow td {
+  border: 1px solid black;
 }

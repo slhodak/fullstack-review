@@ -10,12 +10,11 @@ const RepoList = (props) => (
         return(
           <tbody key={index}>
             <tr className="repoRow">
-              {/* avatar, name as link, watchers, forks, open issues */}
               <td><img src={repo.owner.avatar_url}></img></td>
               <td><a href={repo.owner.url}>{repo.owner.login}</a></td>
               <td><a href={repo.url}>{repo.name}</a></td>
-              <td>Forks: {repo.owner.forks_count}</td>
-              <td>Watchers: {repo.owner.watchers_count}</td>
+              <td>Forks: {repo.forks_count}</td>
+              <td>Watchers: {repo.watchers_count}</td>
               <td>Open Issues: {repo.open_issues_count}</td>
             </tr>
           </tbody>

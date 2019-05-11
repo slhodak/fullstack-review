@@ -55,9 +55,9 @@ let extractRepoData = (repos) => {
     repoData.name = repo.name;
     repoData.owner = {};
     repoData.owner.login = repo.owner.login;
-    repoData.owner.url = repo.owner.url;
+    repoData.owner.url = repo.owner.html_url;
     repoData.owner.avatar_url = repo.owner.avatar_url;
-    repoData.url = repo.url;
+    repoData.url = repo.html_url;
     repoData.watchers_count = repo.watchers_count;
     repoData.forks_count = repo.forks;
     repoData.open_issues_count = repo.open_issues_count;
