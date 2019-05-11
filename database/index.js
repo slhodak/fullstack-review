@@ -18,7 +18,8 @@ let repoSchema = mongoose.Schema({
   },
   watchers_count: Number,
   forks_count: Number,
-  open_issues_count: Number
+  open_issues_count: Number,
+  size: Number
 });
 
 let Repo = mongoose.model('Repo', repoSchema);

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
+import './styles.css';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx'
 
@@ -11,6 +12,10 @@ class App extends React.Component {
       repos: []
     }
     this.search = this.search.bind(this);
+    this.componentWillMount = this.componentWillMount.bind(this);
+  }
+  componentWillMount() {
+    this.getResults();
   }
   search(term) {
     fetch('http://127.0.0.1:1128/repos', {

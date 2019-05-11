@@ -31,15 +31,6 @@ app.post('/repos', function (req, res) {
 });
 
 app.get('/repos', function (req, res) {
-  // mongo.readAll((err, docs) => {
-  //   if (err) {
-  //     console.log('error retrieving records: ' + err);
-  //     res.statusCode(500);
-  //     res.end();
-  //   } else {
-  //     res.send(docs);
-  //   }
-  // });
   extractTopTwentyFive((err, repos) => {
     if (err) {
       console.log('Error extracting top twenty five');
@@ -70,6 +61,7 @@ let extractRepoData = (repos) => {
     repoData.watchers_count = repo.watchers_count;
     repoData.forks_count = repo.forks;
     repoData.open_issues_count = repo.open_issues_count;
+    repoData.size = repo.size;
     filteredRepos.push(repoData);
   });
   return filteredRepos;
@@ -105,7 +97,7 @@ let extractTopTwentyFive = (callback) => {
 }
 
 let rateRepo = (repo) => {
-  return repo.watchers_count + repo.forks_count - (10 * repo.open_issues_count);
+  return (2 * repo.watchers_count) + (3 * repo.forks_count) - (2 * repo.open_issues_count) - (0.2 * repo.size);
 }
 
 let port = 1128;
