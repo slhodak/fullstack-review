@@ -24,26 +24,28 @@ app.post('/repos', function (req, res) {
 app.get('/repos', function (req, res) {
   // this route should send back the top 25 repos
   // get all repos from database
-  mongo.readAll((err, docs) => {
-    if (err) {
-      res.status(500);
-      console.log(err);
-      res.send(`database read error: ${err}`);
-    } else {
-      res.status(200);
-      res.set('Message', 'Successful read');
-      res.send(JSON.stringify(docs));
-    }
-  });
+  res.send(JSON.stringify(extractTopTwentyFive()));
   // rank them
   // send back the top 25
 });
 
-let extractTopTwentyFive = (repos) => {
+let extractTopTwentyFive = () => {
   //  get all repos
   mongo.readAll((err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      data.sort((a, b) => {
+        rateRepo(b) - rateRepo(a);
+      });
+      console.log('extracting');
+      return data.slice(0, 25);
+    }
+  });
+}
 
-  }) 
+let rateRepo = (repo) => {
+  return repo.watchers_count + repo.forks_count - repo.open_issues;
 }
 
 let extractRepoData = (repos) => {
