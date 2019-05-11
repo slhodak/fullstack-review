@@ -23,6 +23,10 @@ let repoSchema = mongoose.Schema({
 let Repo = mongoose.model('Repo', repoSchema);
 
 let save = (data, callback) => {
+  //  insert one at a time, checking for duplicates
+  //  will unique insert throw an error even with one?
+  //  do my own checks before I insert?
+  //  return list of what was updated and what was not
   Repo.insertMany(data)
     .then(docs => {
       console.log('successful insert');
@@ -33,7 +37,7 @@ let save = (data, callback) => {
 };
 
 let readAll = (callback) => {
-  Repo.find({})
+  Repo.find()
     .then(docs => {
       callback(null, docs);
     })

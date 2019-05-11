@@ -5,16 +5,15 @@ var mongo = require('../database/index.js');
 
 let app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.text());
 app.use(express.static(__dirname + '/../client/dist'));
 
 app.post('/repos', function (req, res) {
-  console.log('Handling POST request to /repos');
-  githubHelper.getReposByUsername('slhodak', (error, response, body) => {
-    if (error) {
-      res.send({error});
+  githubHelper.getReposByUsername(req.body, (error, response, body) => {
+    if (response.statusCode !== 200) {
+      res.send(body.message);
     } else {
-      console.log('statusCode:', res && res.statusCode); // Print the response status code if a response was received
+      console.log('Github statusCode:', response.statusCode);
       let data = extractRepoData(JSON.parse(body));
       createRepoRecords(data);
       res.end();
@@ -40,9 +39,12 @@ app.get('/repos', function (req, res) {
   // send back the top 25
 });
 
-// let rankingAlgorithm = (repos) => {
+let extractTopTwentyFive = (repos) => {
+  //  get all repos
+  mongo.readAll((err, data) => {
 
-// }
+  }) 
+}
 
 let extractRepoData = (repos) => {
   let data = [];
@@ -54,10 +56,10 @@ let extractRepoData = (repos) => {
     repoData.owner.login = repo.owner.login;
     repoData.owner.url = repo.owner.url;
     repoData.owner.avatar_url = repo.owner.avatar_url;
-    repoData.url = repo.name;
-    repoData.watchers = repo.name;
-    repoData.forks = repo.name;
-    repoData.open_issues = repo.name;
+    repoData.url = repo.url;
+    repoData.watchers_count = repo.watchers_count;
+    repoData.forks_count = repo.forks;
+    repoData.open_issues = repo.open_issues;
     data.push(repoData);
   });
   return data;
