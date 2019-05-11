@@ -14,23 +14,52 @@ app.post('/repos', function (req, res) {
       res.send(body.message);
     } else {
       console.log('Github statusCode:', response.statusCode);
-      let data = extractRepoData(JSON.parse(body));
-      createRepoRecords(data);
+      let extractedData = extractRepoData(JSON.parse(body));
+      createRepoRecords(extractedData);
       res.end();
     }
   });
 });
 
 app.get('/repos', function (req, res) {
-  // this route should send back the top 25 repos
-  // get all repos from database
   res.send(JSON.stringify(extractTopTwentyFive()));
-  // rank them
-  // send back the top 25
 });
 
+
+//// MODEL METHODS (INCOMING DATA ALTERS MODEL) ////
+
+let extractRepoData = (repos) => {
+  let filteredRepos = [];
+  repos.forEach(repo => {
+    let repoData = {};
+    repoData.id = repo.id;
+    repoData.name = repo.name;
+    repoData.owner = {};
+    repoData.owner.login = repo.owner.login;
+    repoData.owner.url = repo.owner.url;
+    repoData.owner.avatar_url = repo.owner.avatar_url;
+    repoData.url = repo.url;
+    repoData.watchers_count = repo.watchers_count;
+    repoData.forks_count = repo.forks;
+    repoData.open_issues = repo.open_issues;
+    filteredRepos.push(repoData);
+  });
+  return filteredRepos;
+};
+
+let createRepoRecords = (repos) => {
+  mongo.save(repos, (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('Inserted or updated all values');
+    }
+  });
+};
+
+//// VIEW METHODS (OUTGOING DATA ALTERS VIEW) ////
+
 let extractTopTwentyFive = () => {
-  //  get all repos
   mongo.readAll((err, data) => {
     if (err) {
       console.log(err);
@@ -47,36 +76,6 @@ let extractTopTwentyFive = () => {
 let rateRepo = (repo) => {
   return repo.watchers_count + repo.forks_count - repo.open_issues;
 }
-
-let extractRepoData = (repos) => {
-  let data = [];
-  repos.forEach(repo => {
-    let repoData = {};
-    repoData.id = repo.id;
-    repoData.name = repo.name;
-    repoData.owner = {};
-    repoData.owner.login = repo.owner.login;
-    repoData.owner.url = repo.owner.url;
-    repoData.owner.avatar_url = repo.owner.avatar_url;
-    repoData.url = repo.url;
-    repoData.watchers_count = repo.watchers_count;
-    repoData.forks_count = repo.forks;
-    repoData.open_issues = repo.open_issues;
-    data.push(repoData);
-  });
-  return data;
-};
-
-let createRepoRecords = (data) => {
-  //  create or update records in mongoDB for all repos in data
-  mongo.save(data, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(result);
-    }
-  });
-};
 
 let port = 1128;
 

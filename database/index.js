@@ -22,18 +22,19 @@ let repoSchema = mongoose.Schema({
 
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (data, callback) => {
-  //  insert one at a time, checking for duplicates
-  //  will unique insert throw an error even with one?
-  //  do my own checks before I insert?
-  //  return list of what was updated and what was not
-  Repo.insertMany(data)
-    .then(docs => {
-      console.log('successful insert');
-    })
-    .catch(err => {
-      console.log(err);
-    });
+let save = (repos, callback, index = 0) => {
+  if (index < repos.length) {
+    Repo.findOneAndUpdate({id: repos[index].id}, repos[index], {upsert: true},
+      function(err, doc) {
+        if (err) {
+          callback(err);
+        }
+        console.log('upserting a record');
+        save(repos, callback, index + 1);
+      });
+  } else {
+    callback();
+  }
 };
 
 let readAll = (callback) => {
